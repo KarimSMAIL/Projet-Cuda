@@ -1,0 +1,27 @@
+PROJET:
+
+
+POCS:
+TP clustering : 9/12
+2eme Test : réviser le cours (Page 181)
+
+AP:
+2eme Test : réviser le Td
+le rapport à faire avant les vacanses du noel
+
+CN:
+TP : exo 4,5 et 6 pour le 13/12
+Examen : 13/12 
+
+Anglais:
+Travail demander : 12/12, préparer un powerpoint de 5-10 min pour l'un des sujets proposés 
+Examen : 8/01
+
+TM: c reglé
+Examen : date à communiqué plutard
+
+BGL: c reglé
+Implémentation du projet en utilisant les BGL.
+
+OBHPC: c reglé
+
