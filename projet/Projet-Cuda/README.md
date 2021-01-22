@@ -8,4 +8,4 @@ Compute Unified Device Architecture(CUDA), Grid5000, Accélérateur Matériels, 
 Mini Projet - APM
 
 # Etat d'avancement 
-Non terminé
+terminé
