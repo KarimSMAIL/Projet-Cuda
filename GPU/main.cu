@@ -4,8 +4,8 @@
 
 #include "convolution.cuh"
 
-// #define USE_SHARED_MEM // Question 2 et 3
-// #define USE_PITCH  // Question 3
+ #define USE_SHARED_MEM // Question 2 et 3
+ #define USE_PITCH  // Question 3
 
 void init_A(
 	/* IN */
@@ -104,6 +104,7 @@ void check_noerr(int linenr) {
     }
 }
 
+
 int main(int argc, char **argv) {
     int Ni, Nj;
 
@@ -128,13 +129,23 @@ int main(int argc, char **argv) {
     gBlocs.y = (Nj + bThreads.y-1) / bThreads.y;
 
     printf("nthreads : (%d, %d)\n",  bThreads.x, bThreads.y);
-    printf("nblocks  : (%d, %d)\n",  gBlocs.x, gBlocs.y);
+    printf("nblocks : (%d, %d)\n",  gBlocs.x, gBlocs.y);
+    //printf("no erreur\n");
 
     int Ni_2R, Nj_2R;
+    //printf("no erreur");
     noyau_t noyau;
+    //printf("no erreur");
     noyau_t *d_noyau; // pointeur noyau sur device
+    
 
+    //Question1
+    //d_noyau = init_1thread_noyau(&noyau, R_NOYAU);
+    //printf("no erreur");
+
+    //Question2
     d_noyau = init_noyau(&noyau, R_NOYAU);
+    //printf("no erreur");
 
     Ni_2R = Ni + 2*noyau.R;
     Nj_2R = Nj + 2*noyau.R;
@@ -150,8 +161,16 @@ int main(int argc, char **argv) {
 	    B[i] = buf_B + i*Nj_2R;
     }
 
+    //afficher_matrice(d_noyau, R_NOYAU);
+
+//Question4
 #ifdef USE_PITCH
-    // A COMPLETER    
+    // A COMPLETER
+    d_buf_A = NULL;
+    d_buf_B = NULL;
+    cudaMallocPitch(&d_buf_A, &pitchA, (sizeof(int)*Ni_2R), Nj_2R);
+    cudaMallocPitch(&d_buf_B, &pitchB, (sizeof(int)*Ni_2R), Nj_2R);
+
 #else
     cudaMalloc(&d_buf_A, Ni_2R*Nj_2R*sizeof(float));
     cudaMalloc(&d_buf_B, Ni_2R*Nj_2R*sizeof(float));
@@ -167,8 +186,11 @@ int main(int argc, char **argv) {
 	    periodic_bc(&noyau, Ni, Nj, A);
 
 	// Transfert CPU => GPU
+//Question4
 #ifdef USE_PITCH
 	// A COMPLETER
+	cudaMemcpy2D(d_buf_A, pitchA, buf_A, (sizeof(float)*Ni_2R), (sizeof(float)*Ni_2R), Nj_2R, cudaMemcpyHostToDevice);
+
 #else
 	    cudaMemcpy(
 		    d_buf_A, 
@@ -179,6 +201,7 @@ int main(int argc, char **argv) {
 	    check_noerr(__LINE__);
 
 	// Application operateur convolution
+//Question3
 #ifdef USE_SHARED_MEM
 	    convol_sh<<<gBlocs, bThreads>>>(
 		    d_noyau, 
@@ -195,8 +218,10 @@ int main(int argc, char **argv) {
 	    check_noerr(__LINE__);
 
 	// Transfert GPU => CPU
+//Question4
 #ifdef USE_PITCH
 	// A COMPLETER
+	cudaMemcpy2D(buf_B, (sizeof(float)*Ni_2R), d_buf_B, pitchB, (sizeof(float)*Ni_2R), Nj_2R, cudaMemcpyDeviceToHost);
 #else
 	    cudaMemcpy(
 		    buf_B,

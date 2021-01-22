@@ -19,6 +19,8 @@ struct noyau_t
 };
 
 noyau_t *init_noyau(noyau_t *h_noyau, int R);
+//Question1
+noyau_t *init_1thread_noyau(noyau_t *h_noyau, int R);
 void free_noyau(noyau_t *h_noyau, noyau_t *d_noyau);
 
 __global__ void convol_gl(

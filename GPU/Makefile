@@ -7,7 +7,7 @@ NVCC  := nvcc
 INCLUDES = -I. -I/home/etudiant/NVIDIA_GPU_Computing_SDK/C/common/inc
 
 # Common flags
-NVCCFLAGS += -deviceemu
+#NVCCFLAGS += -deviceemu
 COMMONFLAGS += $(INCLUDES) 
 CXXFLAGS += $(COMMONFLAGS)
 CFLAGS += $(COMMONFLAGS) -O0
@@ -21,10 +21,12 @@ $(TARGET): $(OBJS) Makefile
 	$(LINKLINE)
 
 main.o: main.cu
-	$(NVCC) $(NVCCFLAGS) -c $< -o $@
+	$(NVCC) -c $< -o $@
+	#$(NVCC) $(NVCCFLAGS) -c $< -o $@
 
 convolution.o: convolution.cu
-	$(NVCC) $(NVCCFLAGS) -c $< -o $@
+	$(NVCC) -c $< -o $@
+	#$(NVCC) $(NVCCFLAGS) -c $< -o $@
 
 clean:
 	rm *.o
